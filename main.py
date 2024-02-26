@@ -1,11 +1,9 @@
-from openai import OpenAI
+import openai
 import streamlit as st
-
-client = OpenAI
 
 st.title("MajikRuizGPT")
 
-OpenAI.api_key=st.secrets["OPENAI_API_KEY"]
+openai.api_key=st.secrets["OPENAI_API_KEY"]
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4-0125-preview"
@@ -23,7 +21,7 @@ if prompt := st.chat_input("What is up?"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        stream = OpenAI.chat.completions.create(
+        stream = openai.chat.completions.create(
             model=st.session_state["openai_model"],
             messages=[
                 {"role": m["role"], "content": m["content"]}
