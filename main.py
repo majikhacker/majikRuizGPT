@@ -1,6 +1,8 @@
 from openai import OpenAI
 import streamlit as st
 
+client = OpenAI
+
 st.title("MajikRuizGPT")
 
 OpenAI.api_key=st.secrets["OPENAI_API_KEY"]
