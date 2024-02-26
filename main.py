@@ -1,26 +1,33 @@
-import openai
+from openai import OpenAI
 import streamlit as st
 
-st.title("majik_Ruiz")
+st.title("MajikRuizGPT")
 
-# Set your OpenAI API key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key=st.secrets["OPENAI_API_KEY"]
 
-messages = [
-    {"role": "system", "content": "Sarcastic yet efficient AI assistant."},
-]
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-4-0125-preview"
 
-while True:
-    user_message = st.text_input("User:")
-    if user_message: 
-        messages.append(
-            {"role": "user", "content": user_message},
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("What is up?"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        stream = openai.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
         )
-        chat = openai.ChatCompletion.create(
-            model = "gpt-4-1106-preview", messages = messages
-        )
-
-        reply = chat.choices[0].message.content
-
-        st.text_area("ChatGPT:", value=reply, height=200)
-        messages.append({"role": "assistant", "content": reply})
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
