@@ -1,4 +1,4 @@
-The MajikRuizGPT chatbot is a conversational AI powered by OpenAI's GPT models and the user interface was done with Streamlit. It allows users to engage in natural language conversations by providing prompts and receiving AI-generated responses. 
+The st.RudeBot is a conversational chatbot powered by OpenAI's API GPT models and the user interface was done with Streamlit. It allows users to engage in natural language conversations by providing prompts and receiving slightly sarcastic yet efficient AI-generated responses. 
 
  ## Requirements 
 
